@@ -2,3 +2,6 @@
 .env
 
 product.json
+
+
+git remote set-url origin https://nayanchoudhary31@github.com/nayanchoudhary31/nodejs-projects-101.git
