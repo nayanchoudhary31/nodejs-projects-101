@@ -5,7 +5,7 @@ const getAllStaticProducts = async (req, resp) => {
 };
 
 const getAllProducts = async (req, resp) => {
-  const { featured, company, name } = req.query;
+  const { featured, company, name, sort, fields } = req.query;
   let queryObject = {};
   if (featured) {
     queryObject.featured = featured === "true" ? true : false;
@@ -16,7 +16,22 @@ const getAllProducts = async (req, resp) => {
   if (name) {
     queryObject.name = { $regex: name, $options: "i" }; // used for string pattern match option i is Case Sensative
   }
-  const products = await Products.find(queryObject);
+  let result = Products.find(queryObject);
+
+  // Sort
+  if (sort) {
+    const sortList = sort.split(",").join(" ");
+    result = result.sort(sortList);
+  } else {
+    result = result.sort("createdAt");
+  }
+
+  //fields
+  if (fields) {
+    const fieldList = fields.split(",").join(" ");
+    result = result.select(fieldList);
+  }
+  const products = await result;
   resp.status(200).json({ products, nbHits: products.length });
 };
 
