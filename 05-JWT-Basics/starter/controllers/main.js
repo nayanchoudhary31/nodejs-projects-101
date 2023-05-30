@@ -1,11 +1,11 @@
-const CustomAPIError = require("../errors/custom-error");
 const jwt = require("jsonwebtoken");
+const { BadRequestError } = require("../errors");
 const login = async (req, resp) => {
   const { username, password } = req.body;
 
   // Validation for Username & Password
   if (!username || !password) {
-    throw new CustomAPIError("Username & Password is Required", 400);
+    throw new BadRequestError("Username & Password is Required", 400);
   }
 
   // Generally we used DB Id
@@ -25,23 +25,11 @@ const login = async (req, resp) => {
 };
 
 const dashboard = async (req, resp) => {
-  const authHeaders = req.headers.authorization;
-  if (!authHeaders || !authHeaders.startsWith("Bearer ")) {
-    throw new CustomAPIError("Token is required!", 401);
-  }
-  // Get the token
-  const token = authHeaders.split(" ")[1];
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const luckyNumber = Math.floor(Math.random() * 100);
-    return resp.status(200).json({
-      msg: `Hello, ${decoded.username}`,
-      secret: `Here is your authorized data, your lucky number is ${luckyNumber}`,
-    });
-  } catch (error) {
-    throw new CustomAPIError("Not  authorized to access this route!", 401);
-  }
+  const luckyNumber = Math.floor(Math.random() * 100);
+  resp.status(200).json({
+    msg: `Hello, ${decoded.username}`,
+    secret: `Here is your authorized data, your lucky number is ${luckyNumber}`,
+  });
 };
 
 module.exports = { login, dashboard };
