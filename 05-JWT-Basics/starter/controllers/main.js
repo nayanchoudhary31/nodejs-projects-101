@@ -26,7 +26,7 @@ const login = async (req, resp) => {
 
 const dashboard = async (req, resp) => {
   const luckyNumber = Math.floor(Math.random() * 100);
-  resp.status(200).json({
+  return resp.status(200).json({
     msg: `Hello, ${decoded.username}`,
     secret: `Here is your authorized data, your lucky number is ${luckyNumber}`,
   });
