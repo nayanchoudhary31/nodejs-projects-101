@@ -25,11 +25,15 @@ const login = async (req, resp) => {
 };
 
 const dashboard = async (req, resp) => {
-  const luckyNumber = Math.floor(Math.random() * 100);
-  return resp.status(200).json({
-    msg: `Hello, ${decoded.username}`,
-    secret: `Here is your authorized data, your lucky number is ${luckyNumber}`,
-  });
+  try {
+    const luckyNumber = Math.floor(Math.random() * 100);
+    return resp.status(200).json({
+      msg: `Hello, ${req.user.username}`,
+      secret: `Here is your authorized data, your lucky number is ${luckyNumber}`,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 module.exports = { login, dashboard };
